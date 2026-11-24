@@ -4,6 +4,7 @@ import com.denfop.api.crop.genetics.EnumGenetic;
 import com.denfop.api.crop.genetics.GeneticTraits;
 import com.denfop.api.crop.genetics.Genome;
 import com.denfop.datacomponent.GenomeCrop;
+import com.vbiafe.sjcore.SJCore;
 
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
@@ -26,7 +27,7 @@ import java.util.Map;
 public final class SJBiology {
 
     public static final DeferredRegister<DataComponentType<?>> COMPONENTS =
-            DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, "sinkjourneycore");
+            DeferredRegister.create(Registries.DATA_COMPONENT_TYPE, SJCore.MODID);
 
     /** 隐性等位基因：每个轴一个 IU 的原生基因值。 */
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<GenomeCrop>> ALLELES =
