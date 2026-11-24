@@ -38,3 +38,6 @@ run/
 **/src/generated/**/.cache/
 repo/
 !**/src/**/repo/
+
+### 本地模组依赖（IU 本体，不提交） ###
+libs/

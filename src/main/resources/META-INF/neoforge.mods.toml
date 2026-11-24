@@ -1,0 +1,42 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="sinkjourneycore"
+version="0.1.0"
+displayName="Sink Journey Core"
+authors="vbiafe"
+description='''
+Sink Journey 整合包的 Java 侧魔改层。
+当前内容：用配置文件给 Industrial Upgrade 的机器配方池打补丁（增 / 删 / 换），
+在 IU 初始化完成之后统一施加一次，重复加载不会堆叠条目。
+'''
+
+[[dependencies.sinkjourneycore]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.0,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.sinkjourneycore]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1,1.22)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.sinkjourneycore]]
+modId="industrialupgrade"
+type="optional"
+versionRange="[0,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.sinkjourneycore]]
+modId="mmcr"
+type="optional"
+versionRange="[0,)"
+ordering="AFTER"
+side="BOTH"

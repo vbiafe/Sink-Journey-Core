@@ -1,0 +1,12 @@
+{
+  "values": [
+    "mmcr:item_output_bus_primitive",
+    "mmcr:item_output_bus_root",
+    "mmcr:item_output_bus_ember",
+    "mmcr:item_output_bus_kinetic",
+    "mmcr:item_output_bus_steam",
+    "mmcr:item_output_bus_pneumatic",
+    "mmcr:item_output_bus_end",
+    "mmcr:item_output_bus_radiance"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "values": [
+    "mmcr:fluid_output_hatch_primitive",
+    "mmcr:fluid_output_hatch_root",
+    "mmcr:fluid_output_hatch_ember",
+    "mmcr:fluid_output_hatch_kinetic",
+    "mmcr:fluid_output_hatch_steam",
+    "mmcr:fluid_output_hatch_pneumatic",
+    "mmcr:fluid_output_hatch_end",
+    "mmcr:fluid_output_hatch_radiance"
+  ]
+}
