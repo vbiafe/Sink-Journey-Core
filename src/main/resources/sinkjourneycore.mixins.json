@@ -4,7 +4,8 @@
   "package": "com.vbiafe.sjcore.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "ItemDisplayBuilderMixin"
+    "ItemDisplayBuilderMixin",
+    "MMCRBotaniaBridgeMixin"
   ],
   "injectors": {
     "defaultRequire": 0
