@@ -7,6 +7,10 @@
     "mmcr:item_input_bus_steam",
     "mmcr:item_input_bus_pneumatic",
     "mmcr:item_input_bus_end",
-    "mmcr:item_input_bus_radiance"
+    "mmcr:item_input_bus_radiance",
+    "mmcr:item_input_bus_basic",
+    "mmcr:item_input_bus_improved",
+    "mmcr:item_input_bus_advanced",
+    "mmcr:item_input_bus_perfect"
   ]
 }

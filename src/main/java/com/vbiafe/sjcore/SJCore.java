@@ -1,11 +1,12 @@
 package com.vbiafe.sjcore;
 
 import com.mojang.logging.LogUtils;
-import com.vbiafe.sjcore.bio.BioCommand;
-import com.vbiafe.sjcore.bio.SJBiology;
 import com.vbiafe.sjcore.command.SJCoreCommand;
 import com.vbiafe.sjcore.iu.IuPatcher;
 import com.vbiafe.sjcore.port.SinkPorts;
+
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.ItemStack;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -17,6 +18,9 @@ import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import org.slf4j.Logger;
+
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Sink Journey Core —— 本整合包的 Java 侧魔改层。
@@ -37,6 +41,20 @@ public final class SJCore {
     /** IU 的 TagsUpdatedEvent 之后才排队，下一 tick 统一施加补丁。 */
     private static boolean pendingPatch;
 
+    /** 已经告警过的重复标签页条目，避免每次重建刷满日志。 */
+    private static final Set<String> DUPLICATE_TAB_ENTRY_SEEN = ConcurrentHashMap.newKeySet();
+
+    /**
+     * 由 {@code ItemDisplayBuilderMixin} 调用：某个 stack 在同一标签页里被加了第二遍，
+     * 已按无操作跳过，这里留一条告警方便定位是谁塞重复的。
+     */
+    public static void onDuplicateTabEntry(ItemStack stack) {
+        String id = BuiltInRegistries.ITEM.getKey(stack.getItem()) + " " + stack.getComponents();
+        if (DUPLICATE_TAB_ENTRY_SEEN.add(id)) {
+            LOGGER.warn("[SJCore] 创造标签页重复条目已跳过：{}（OneEnoughItem 重建标签页时命中，非致命）", id);
+        }
+    }
+
     public SJCore(IEventBus modBus, ModContainer container) {
         NeoForge.EVENT_BUS.addListener(SJCore::onTagsUpdated);
         NeoForge.EVENT_BUS.addListener(SJCore::onServerTick);
@@ -50,15 +68,6 @@ public final class SJCore {
             }
         } else {
             LOGGER.info("[SJCore] 未安装 MMCR，分级输入仓不注册");
-        }
-
-        // 双倍体遗传层：组件本身与 IU 无关，但读写全靠 IU 的 Genome/GenomeCrop，没装就别注册
-        if (isIuLoaded()) {
-            try {
-                SJBiology.init(modBus);
-            } catch (Throwable t) {
-                LOGGER.error("[SJCore] 遗传层组件注册失败（IU 版本不匹配？）", t);
-            }
         }
 
         LOGGER.info("[SJCore] 已加载；Industrial Upgrade {}", isIuLoaded() ? "已安装，配方补丁启用" : "未安装，补丁空转");
@@ -93,8 +102,5 @@ public final class SJCore {
 
     private static void onRegisterCommands(RegisterCommandsEvent event) {
         SJCoreCommand.register(event.getDispatcher());
-        if (isIuLoaded()) {
-            BioCommand.register(event);
-        }
     }
 }

@@ -7,6 +7,10 @@
     "mmcr:item_output_bus_steam",
     "mmcr:item_output_bus_pneumatic",
     "mmcr:item_output_bus_end",
-    "mmcr:item_output_bus_radiance"
+    "mmcr:item_output_bus_radiance",
+    "mmcr:item_output_bus_basic",
+    "mmcr:item_output_bus_improved",
+    "mmcr:item_output_bus_advanced",
+    "mmcr:item_output_bus_perfect"
   ]
 }

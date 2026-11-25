@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.vbiafe.sjcore.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ItemDisplayBuilderMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

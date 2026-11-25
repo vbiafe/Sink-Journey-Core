@@ -13,6 +13,9 @@ Sink Journey 整合包的 Java 侧魔改层。
 在 IU 初始化完成之后统一施加一次，重复加载不会堆叠条目。
 '''
 
+[[mixins]]
+config="sinkjourneycore.mixins.json"
+
 [[dependencies.sinkjourneycore]]
 modId="neoforge"
 type="required"

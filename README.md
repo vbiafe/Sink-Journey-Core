@@ -3,15 +3,16 @@
 整合包的 Java 侧魔改层。目前两件事：
 
 1. 给 **Industrial Upgrade** 的机器配方池打补丁（见下文「补丁文件」）。
-2. 给 **MMCR（模块化机械）** 注册分级仓：按时代各一套物品输入/输出总线、流体输入/输出仓，
-   代码在 `src/main/java/com/vbiafe/sjcore/port/SinkPorts.java`，
+2. 给 **MMCR（模块化机械）** 注册分级仓：8 个时代各一套 + IU 机器四档各一套物品输入/输出总线、
+   流体输入/输出仓，代码在 `src/main/java/com/vbiafe/sjcore/port/SinkPorts.java`（`ERAS` / `GRADES` 两张表），
    玩法说明见 `kubejs/docs/PORT_TIERS.md`。
 
 ## 分级输入仓
 
 MMCR 自带的仓只有尺寸分级（微型 1 格 → 超级 32 格），机器的端口要求只有「至少 N 档」，
-没有「只能是这个仓」的写法。本模组按时代注册 8 套输入仓（id 在 `mmcr` 命名空间下，
-例如 `mmcr:item_input_bus_primitive`），结构脚本里把端口位写成方块 id 即可锁死：
+没有「只能是这个仓」的写法。本模组按时代注册 8 套输入仓、按 IU 机器等级再注册 4 套
+（id 在 `mmcr` 命名空间下，例如 `mmcr:item_input_bus_primitive`、`mmcr:item_input_bus_basic`），
+结构脚本里把端口位写成方块 id 即可锁死：
 
 ```js
 .set('I', 'mmcr:item_input_bus_kinetic')

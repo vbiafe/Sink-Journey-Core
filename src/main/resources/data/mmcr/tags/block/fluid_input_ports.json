@@ -7,6 +7,10 @@
     "mmcr:fluid_input_hatch_steam",
     "mmcr:fluid_input_hatch_pneumatic",
     "mmcr:fluid_input_hatch_end",
-    "mmcr:fluid_input_hatch_radiance"
+    "mmcr:fluid_input_hatch_radiance",
+    "mmcr:fluid_input_hatch_basic",
+    "mmcr:fluid_input_hatch_improved",
+    "mmcr:fluid_input_hatch_advanced",
+    "mmcr:fluid_input_hatch_perfect"
   ]
 }

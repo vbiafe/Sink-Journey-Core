@@ -72,22 +72,45 @@ public final class SinkPorts {
             new Era("end", "末地", "End", ItemBusSize.LUDICROUS, FluidHatchSize.LUDICROUS),
             new Era("radiance", "星辉", "Radiance", ItemBusSize.LUDICROUS, FluidHatchSize.VACUUM));
 
+    /** IU 机器四档（基础 → 改良 → 高级 → 完美）的仓。 */
+    public record Grade(String id, String zh, String en, ItemBusSize item, FluidHatchSize fluid) {}
+
+    /**
+     * IU 机器等级表。这是电力时代的另一条阶梯，接在时代仓的蒸汽之后：
+     * IU 自己的机器就是按 基础 / 改良 / 高级 / 完美 四档出的（basemachine → …per），
+     * 所以化学侧的仓也照这四档排，容量继续往上走（12 格/32k → 16 格/64k → 32 格/128k → 32 格/256k）。
+     */
+    public static final List<Grade> GRADES = List.of(
+            new Grade("basic", "基础", "Basic", ItemBusSize.BIG, FluidHatchSize.BIG),
+            new Grade("improved", "改良", "Improved", ItemBusSize.HUGE, FluidHatchSize.HUGE),
+            new Grade("advanced", "高级", "Advanced", ItemBusSize.LUDICROUS, FluidHatchSize.LUDICROUS),
+            new Grade("perfect", "完美", "Perfect", ItemBusSize.LUDICROUS, FluidHatchSize.VACUUM));
+
     private SinkPorts() {}
 
     public static void registerAll() {
         int count = 0;
         for (Era era : ERAS) {
-            registerPort("item_input_bus_" + era.id(), new PortKinds.ItemBusKind(
-                    "item_input_bus_" + era.id(), IOType.INPUT, era.item(), ItemInputBusBlockEntity::new));
-            registerPort("item_output_bus_" + era.id(), new PortKinds.ItemBusKind(
-                    "item_output_bus_" + era.id(), IOType.OUTPUT, era.item(), ItemOutputBusBlockEntity::new));
-            registerPort("fluid_input_hatch_" + era.id(), new PortKinds.FluidHatchKind(
-                    "fluid_input_hatch_" + era.id(), IOType.INPUT, era.fluid(), FluidInputHatchBlockEntity::new));
-            registerPort("fluid_output_hatch_" + era.id(), new PortKinds.FluidHatchKind(
-                    "fluid_output_hatch_" + era.id(), IOType.OUTPUT, era.fluid(), FluidOutputHatchBlockEntity::new));
-            count += 4;
+            count += registerSet(era.id(), era.item(), era.fluid());
         }
-        SJCore.LOGGER.info("[SJCore] 分级仓已注册：{} 个时代 / {} 个方块", ERAS.size(), count);
+        for (Grade grade : GRADES) {
+            count += registerSet(grade.id(), grade.item(), grade.fluid());
+        }
+        SJCore.LOGGER.info("[SJCore] 分级仓已注册：{} 个时代 + {} 个 IU 机器档 / {} 个方块",
+                ERAS.size(), GRADES.size(), count);
+    }
+
+    /** 一个档位四件套：物品输入 / 输出总线、流体输入 / 输出仓。 */
+    private static int registerSet(String suffix, ItemBusSize item, FluidHatchSize fluid) {
+        registerPort("item_input_bus_" + suffix, new PortKinds.ItemBusKind(
+                "item_input_bus_" + suffix, IOType.INPUT, item, ItemInputBusBlockEntity::new));
+        registerPort("item_output_bus_" + suffix, new PortKinds.ItemBusKind(
+                "item_output_bus_" + suffix, IOType.OUTPUT, item, ItemOutputBusBlockEntity::new));
+        registerPort("fluid_input_hatch_" + suffix, new PortKinds.FluidHatchKind(
+                "fluid_input_hatch_" + suffix, IOType.INPUT, fluid, FluidInputHatchBlockEntity::new));
+        registerPort("fluid_output_hatch_" + suffix, new PortKinds.FluidHatchKind(
+                "fluid_output_hatch_" + suffix, IOType.OUTPUT, fluid, FluidOutputHatchBlockEntity::new));
+        return 4;
     }
 
     /**
