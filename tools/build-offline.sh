@@ -7,6 +7,7 @@
 #
 # 用法：
 #   tools/build-offline.sh                       # 默认读 C:/Users/Administrator/pcl/.minecraft
+#   tools/build-offline.sh --install             # 构建并直接同步进整合包 mods/（校验 sha1）
 #   SJ_GAME_DIR=/d/mc tools/build-offline.sh     # 指定游戏目录
 set -euo pipefail
 
@@ -14,6 +15,14 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 GAME="${SJ_GAME_DIR:-C:/Users/Administrator/pcl/.minecraft}"
 NEO_VERSION="${NEO_VERSION:-21.1.265}"
 MC_DIR="${MC_DIR:-$GAME/libraries/net/minecraft/client/1.21.1-20240808.144430}"
+
+INSTALL=0
+for arg in "$@"; do
+    case "$arg" in
+        --install|--sync) INSTALL=1 ;;
+        *) echo "未知参数：$arg（可用：--install）" >&2; exit 2 ;;
+    esac
+done
 
 # 注意：同目录下还有 client-*-extra.jar（只有 assets），必须挑 -srg 的那个
 MC_JAR="$(ls "$MC_DIR"/client-*-srg.jar | head -1)"
@@ -28,8 +37,11 @@ SJ_VERSION_DIR="${SJ_VERSION_DIR:-Sink Journey}"
 IU_JAR="$(ls "$GAME/versions/$SJ_VERSION_DIR/mods/"*IndustrialUpgrade-*.jar 2>/dev/null | head -1 || true)"
 # MMCR（模块化机械）用于分级输入仓：方块 / 方块实体 / 端口种类都复用它的注册表
 MMCR_JAR="$(ls "$GAME/versions/$SJ_VERSION_DIR/mods/"mmcr-*.jar 2>/dev/null | head -1 || true)"
+# 核电工艺（NuclearCraft Neohaul）与 ZeroCore2：电解池的外壳档位要复用它们的部件类型
+NC_JAR="$(ls "$GAME/versions/$SJ_VERSION_DIR/mods/"nuclearcraftneohaul-*.jar 2>/dev/null | head -1 || true)"
+ZC_JAR="$(ls "$GAME/versions/$SJ_VERSION_DIR/mods/"ZeroCore2-*.jar 2>/dev/null | head -1 || true)"
 
-for jar in "$MC_JAR" "$NEO_JAR" "$NEO_CLIENT_JAR" "$IU_JAR" "$MMCR_JAR"; do
+for jar in "$MC_JAR" "$NEO_JAR" "$NEO_CLIENT_JAR" "$IU_JAR" "$MMCR_JAR" "$NC_JAR" "$ZC_JAR"; do
     [[ -f "$jar" ]] || { echo "缺少依赖：$jar" >&2; exit 1; }
 done
 
@@ -50,6 +62,8 @@ link "$NEO_CLIENT_JAR"
 link "$NEO_JAR"
 link "$IU_JAR"
 link "$MMCR_JAR"
+link "$NC_JAR"
+link "$ZC_JAR"
 
 find "$GAME/libraries" -name '*.jar'     -not -path '*/net/minecraft/client/*'     -not -path '*/net/minecraftforge/forge/*'     -not -path '*/net/neoforged/neoforge/*'     | while IFS= read -r jar; do link "$jar"; done
 
@@ -72,3 +86,24 @@ cp -r "$ROOT/src/main/resources/." "$OUT/"
 JAR_OUT="$ROOT/build/libs/sinkjourneycore-0.1.0.jar"
 jar --create --file "$(cygpath -w "$JAR_OUT")" -C "$OUT_W" .
 echo "构建完成：$JAR_OUT"
+
+if (( INSTALL )); then
+    MODS_DIR="$GAME/versions/$SJ_VERSION_DIR/mods"
+    DEST="$MODS_DIR/sinkjourneycore-0.1.0.jar"
+    if [[ ! -d "$MODS_DIR" ]]; then
+        echo "找不到整合包的 mods 目录：$MODS_DIR（用 SJ_VERSION_DIR 指定版本目录名）" >&2
+        exit 1
+    fi
+    cp -f "$JAR_OUT" "$DEST"
+    BUILT="$(sha1sum "$JAR_OUT" | cut -d' ' -f1)"
+    SYNCED="$(sha1sum "$DEST" | cut -d' ' -f1)"
+    if [[ "$BUILT" != "$SYNCED" ]]; then
+        echo "同步校验失败：$BUILT != $SYNCED" >&2
+        exit 1
+    fi
+    echo "已安装：$DEST"
+    echo "sha1：$SYNCED"
+    if [[ -f "$MODS_DIR/sinkjourneycore-0.1.0.jar.bak" ]]; then
+        echo "提示：mods/ 里还有 sinkjourneycore-0.1.0.jar.bak（不会被加载），确认无用后可以删掉"
+    fi
+fi

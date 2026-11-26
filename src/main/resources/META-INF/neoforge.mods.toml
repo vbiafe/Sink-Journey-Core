@@ -43,3 +43,17 @@ type="optional"
 versionRange="[0,)"
 ordering="AFTER"
 side="BOTH"
+
+[[dependencies.sinkjourneycore]]
+modId="nuclearcraftneohaul"
+type="optional"
+versionRange="[0,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.sinkjourneycore]]
+modId="zerocore"
+type="optional"
+versionRange="[0,)"
+ordering="AFTER"
+side="BOTH"

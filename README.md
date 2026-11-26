@@ -39,7 +39,10 @@ KubeJS 能改工作台配方，但 IU 的机器配方（挤压机 / 冲孔机 / 
 本机访问不到 `maven.neoforged.net`，Gradle（ModDevGradle）拉不到 NeoForge userdev，所以有两条路：
 
 ```bash
-# 离线构建：用整合包里现成的 jar 当 classpath，产物直接进 build/libs/
+# 离线构建并直接装进整合包（构建 + 复制 + sha1 校验，一条命令）
+tools/build-offline.sh --install
+
+# 只构建，产物留在 build/libs/
 tools/build-offline.sh
 
 # 有网的机器上走标准 MDK 流程（需要先把 IU jar 放到 libs/industrialupgrade.jar）
@@ -47,9 +50,11 @@ tools/build-offline.sh
 ```
 
 离线脚本默认读 `C:/Users/Administrator/pcl/.minecraft`，可用环境变量覆盖：
-`SJ_GAME_DIR=/d/mc SJ_VERSION_DIR="Sink Journey" tools/build-offline.sh`。
+`SJ_GAME_DIR=/d/mc SJ_VERSION_DIR="Sink Journey" tools/build-offline.sh --install`。
 
-产物 `build/libs/sinkjourneycore-0.1.0.jar` 复制到整合包的 `mods/` 即可。
+`--install` 会覆盖 `mods/sinkjourneycore-0.1.0.jar` 并打印构建产物与安装文件的 sha1，
+两边不一致就报错退出——这样就不会再出现「改完源码忘了换 jar」或者「mods 里那个 jar
+不知道是哪个版本编的」这两种情况。新 jar 下次启动生效。
 
 ## 补丁文件
 
