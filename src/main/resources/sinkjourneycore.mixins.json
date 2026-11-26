@@ -4,8 +4,17 @@
   "package": "com.vbiafe.sjcore.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "FileToIdConverterPrefixAccessor",
     "ItemDisplayBuilderMixin",
-    "MMCRBotaniaBridgeMixin"
+    "IuSpaceDimensionRegistrationMixin",
+    "IuSpaceEnvironmentScopeMixin",
+    "IuSpaceTranslocatorItemMixin",
+    "IuSpaceTravelBlockMixin",
+    "MMCRBotaniaBridgeMixin",
+    "ElectrolyzerFrameTierMixin"
+  ],
+  "client": [
+    "PollutionVisualConfigGuardMixin"
   ],
   "injectors": {
     "defaultRequire": 0
