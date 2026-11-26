@@ -6,12 +6,14 @@
   "mixins": [
     "FileToIdConverterPrefixAccessor",
     "ItemDisplayBuilderMixin",
+    "IuSpaceCatalogMixin",
     "IuSpaceDimensionRegistrationMixin",
     "IuSpaceEnvironmentScopeMixin",
     "IuSpaceTranslocatorItemMixin",
     "IuSpaceTravelBlockMixin",
     "MMCRBotaniaBridgeMixin",
-    "ElectrolyzerFrameTierMixin"
+    "ElectrolyzerFrameTierMixin",
+    "IuAlloyHeatGateMixin"
   ],
   "client": [
     "PollutionVisualConfigGuardMixin"

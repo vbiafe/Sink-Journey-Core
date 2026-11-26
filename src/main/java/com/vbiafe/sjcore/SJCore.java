@@ -19,6 +19,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 import org.slf4j.Logger;
@@ -109,6 +110,7 @@ public final class SJCore {
 
     public SJCore(IEventBus modBus, ModContainer container) {
         NeoForge.EVENT_BUS.addListener(SJCore::onTagsUpdated);
+        NeoForge.EVENT_BUS.addListener(SJCore::onServerStarted);
         NeoForge.EVENT_BUS.addListener(SJCore::onServerTick);
         NeoForge.EVENT_BUS.addListener(SJCore::onRegisterCommands);
 
@@ -159,6 +161,21 @@ public final class SJCore {
         } catch (Throwable t) {
             // IU 没装或版本不匹配时不要把整个服务器 tick 打断
             LOGGER.error("[SJCore] IU 配方补丁异常", t);
+        }
+    }
+
+    /**
+     * 太空目录是懒加载的（第一次有人读天体表才建），而 {@code IuSpaceCatalogMixin} 只在它建成时改矿表。
+     * 服务端开局主动摸一次，保证矿表在玩家点开远征界面前就已经重排好；客户端自己那一份由界面访问时补上。
+     */
+    private static void onServerStarted(ServerStartedEvent event) {
+        if (!isIuLoaded()) {
+            return;
+        }
+        try {
+            com.denfop.api.space.dimension.SpaceBootstrap.ensureSpaceCatalogInitialized();
+        } catch (Throwable t) {
+            LOGGER.error("[SJCore] IU 太空目录初始化失败", t);
         }
     }
 

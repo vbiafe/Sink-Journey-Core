@@ -1,11 +1,13 @@
 # Sink Journey Core
 
-整合包的 Java 侧魔改层。目前两件事：
+整合包的 Java 侧魔改层。目前三件事：
 
 1. 给 **Industrial Upgrade** 的机器配方池打补丁（见下文「补丁文件」）。
 2. 给 **MMCR（模块化机械）** 注册分级仓：8 个时代各一套 + IU 机器四档各一套物品输入/输出总线、
    流体输入/输出仓，代码在 `src/main/java/com/vbiafe/sjcore/port/SinkPorts.java`（`ERAS` / `GRADES` 两张表），
    玩法说明见 `kubejs/docs/PORT_TIERS.md`。
+3. 把 **IU 太空远征 / 殖民地的出矿表**按矿物文档重排：`src/main/java/com/vbiafe/sjcore/space/SpaceOreTable.java`
+   一张 `ORE_BY_BODY`，玩法与分层见 `kubejs/docs/ORE_GENERATION.md §4.7`。
 
 ## 分级输入仓
 
