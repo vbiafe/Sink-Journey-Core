@@ -2,6 +2,7 @@ package com.vbiafe.sjcore;
 
 import com.mojang.logging.LogUtils;
 import com.vbiafe.sjcore.command.SJCoreCommand;
+import com.vbiafe.sjcore.decor.SJDolls;
 import com.vbiafe.sjcore.iu.IuPatcher;
 import com.vbiafe.sjcore.machine.SJMachineFrames;
 import com.vbiafe.sjcore.port.SinkPorts;
@@ -109,6 +110,8 @@ public final class SJCore {
     }
 
     public SJCore(IEventBus modBus, ModContainer container) {
+        SJDolls.register(modBus);
+
         NeoForge.EVENT_BUS.addListener(SJCore::onTagsUpdated);
         NeoForge.EVENT_BUS.addListener(SJCore::onServerStarted);
         NeoForge.EVENT_BUS.addListener(SJCore::onServerTick);

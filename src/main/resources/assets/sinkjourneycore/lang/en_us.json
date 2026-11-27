@@ -1,3 +1,7 @@
 {
-  "sjcore.space.travel_locked": "Manned spaceflight goes through Ad Astra: use a launch pad and rocket. Industrial Upgrade keeps unmanned expeditions and colonies only."
+  "sjcore.space.travel_locked": "Manned spaceflight goes through Ad Astra: use a launch pad and rocket. Industrial Upgrade keeps unmanned expeditions and colonies only.",
+  "itemGroup.sinkjourneycore.dolls": "Sink Journey",
+  "block.sinkjourneycore.gustsing": "GusTsing",
+  "block.sinkjourneycore.angelica22": "Angelica22",
+  "block.sinkjourneycore.bjdhhh": "bjdhhh"
 }

@@ -32,7 +32,7 @@ import java.util.Set;
  * <table>
  *   <caption>天体分层</caption>
  *   <tr><th>层</th><th>矿物文档</th><th>天体</th></tr>
- *   <tr><td>月球层</td><td>§4.4 钛 / 钒 / 锆</td><td>moon、phobos、deimos、charon、proteus</td></tr>
+ *   <tr><td>月球层</td><td>§4.4 钛 / 钒 / 锆；月球另多一条陨铁</td><td>moon、phobos、deimos、charon、proteus</td></tr>
  *   <tr><td>水星层</td><td>§4.4 钨 / 钼 / 钽 / 铌</td><td>mercury</td></tr>
  *   <tr><td>火星层</td><td>§4.4 独居石 / 铪</td><td>mars</td></tr>
  *   <tr><td>冰星层</td><td>§4.4 锂 / 铍</td><td>九颗冰壳卫星</td></tr>
@@ -60,6 +60,20 @@ public final class SpaceOreTable {
 
     /** 独居石给的是物品（一块矿挖下来 2 份），不是矿石方块。 */
     private static final String MONAZITE = "kubejs:monazite";
+
+    /**
+     * 陨铁（Fe-Ni 天铁）：月球风化层里的天铁，也是 IU 太空模块模板唯一的原料。
+     *
+     * <p>它只有 {@code blockspace3/moon_meteoric_iron_ore} 一个来源。2026-11-26 的矿表重排把每个天体的
+     * {@code blockspace*} 矿换成本层几种之后，月球只剩钛 / 钒 / 锆，陨铁链就断了（模块模板、
+     * {@code crafting_764}、{@code tome_research} 一起悬空）。这里给月球补一条独立出矿：
+     * 不占钛钒锆的位置，数量与概率照抄本天体的第一条矿。
+     */
+    private static final String METEORIC = "industrialupgrade:blockspace3/moon_meteoric_iron_ore";
+
+    /** 额外补的出矿：只有月球多一条陨铁。 */
+    private static final Map<String, List<String>> EXTRA_BY_BODY = Map.of(
+        "moon", List.of(METEORIC));
 
     /**
      * IU 的虚构矿：现实里没有这种矿，矿物文档也就没给它们分层。这些留在原天体不动，
@@ -123,6 +137,15 @@ public final class SpaceOreTable {
                 Row row = rows.get(i);
                 new BaseResource(oreStack(ores, i, row.count()), row.min(), row.max(), row.percent(), body, row.rover());
             }
+            List<String> extra = EXTRA_BY_BODY.get(body.getName());
+            if (extra != null && !rows.isEmpty()) {
+                Row base = rows.get(0);
+                for (String ore : extra) {
+                    new BaseResource(oreStack(List.of(ore), 0, base.count()),
+                        base.min(), base.max(), base.percent(), body, base.rover());
+                }
+                entries += extra.size();
+            }
             bodies++;
             entries += rows.size();
         }
@@ -134,6 +157,13 @@ public final class SpaceOreTable {
 
     private static boolean allOresRegistered() {
         for (List<String> ores : ORE_BY_BODY.values()) {
+            for (String id : ores) {
+                if (BuiltInRegistries.ITEM.get(ResourceLocation.parse(id)) == Items.AIR) {
+                    return false;
+                }
+            }
+        }
+        for (List<String> ores : EXTRA_BY_BODY.values()) {
             for (String id : ores) {
                 if (BuiltInRegistries.ITEM.get(ResourceLocation.parse(id)) == Items.AIR) {
                     return false;

@@ -8,6 +8,9 @@
    玩法说明见 `kubejs/docs/PORT_TIERS.md`。
 3. 把 **IU 太空远征 / 殖民地的出矿表**按矿物文档重排：`src/main/java/com/vbiafe/sjcore/space/SpaceOreTable.java`
    一张 `ORE_BY_BODY`，玩法与分层见 `kubejs/docs/ORE_GENERATION.md §4.7`。
+4. 关掉 **IU 的「水里做充能红石」**：`src/main/java/com/vbiafe/sjcore/mixin/IuChargedRedstoneWaterMixin.java`
+   在 `IUEventHandler#checkAndTransform` 头部返回 `null`（那条是事件处理器硬编码，KubeJS 删不掉）。
+   充能红石改走晶体充能器，第一块由末影龙掉落，见 `kubejs/docs/INFUSED_REDSTONE_QUARTZ.md`。
 
 ## 分级输入仓
 

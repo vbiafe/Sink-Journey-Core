@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "sinkjourneycore:block/angelica22"
+    },
+    "facing=east": {
+      "model": "sinkjourneycore:block/angelica22",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "sinkjourneycore:block/angelica22",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "sinkjourneycore:block/angelica22",
+      "y": 270
+    }
+  }
+}

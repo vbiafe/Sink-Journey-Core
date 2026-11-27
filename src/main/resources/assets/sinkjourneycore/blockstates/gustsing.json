@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "sinkjourneycore:block/gustsing"
+    },
+    "facing=east": {
+      "model": "sinkjourneycore:block/gustsing",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "sinkjourneycore:block/gustsing",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "sinkjourneycore:block/gustsing",
+      "y": 270
+    }
+  }
+}

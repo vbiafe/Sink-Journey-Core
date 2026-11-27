@@ -13,7 +13,8 @@
     "IuSpaceTravelBlockMixin",
     "MMCRBotaniaBridgeMixin",
     "ElectrolyzerFrameTierMixin",
-    "IuAlloyHeatGateMixin"
+    "IuAlloyHeatGateMixin",
+    "IuChargedRedstoneWaterMixin"
   ],
   "client": [
     "PollutionVisualConfigGuardMixin"
